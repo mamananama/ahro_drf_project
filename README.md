@@ -10,7 +10,7 @@
 * 데이터베이스 기능
   * GPT와 나눈 대화는 데이터베이스에 저장되어야 함
   * 저장된 채팅 내역을 조회가능 해야 함
-  * 저장된 채팅 내역은 로그인한 본인만 볼 수 있음
+  * 저장된 채팅 내역은 로그인 한 본인만 볼 수 있음
 
 # 사용기술
 
@@ -31,3 +31,14 @@
 
 # WBS
 Link: https://1drv.ms/x/s!AiyH75cHF2uNheJxLhLGTF2vIjmFlg?e=B5sFTF&nav=MTVfe0VFNDFCOEI2LURBRkEtNDAwMS05MUJFLTY0MjJEMjNBQUZBM30
+
+# URL 설계
+|URL|설명|CREATE|READ|UPDATE|DELETE|
+|:---|:---|:---:|:---:|:---:|:---:|
+|1. main|
+|/main/index/|메인페이지|X|GET: O|X|X|
+|2. account|
+|/account/signup/|POST: O|GET: O|X|X|X|
+|/account/login/|POST: O|GET: O|X|X|X|
+|/account/profile/\<str:username\>/|X|비로그인 User - GET: X<br>로그인 User - GET: O|로그인 한 본인 User - PUT: O<br>로그인 한 본인 제외 모든 User - PUT: X|X|X|
+|/account/delete/\<str:username\>/|X|X|X|로그인 한 본인 User - DELETE: O<br>로그인 한 본인 제외 모든 User - DELETE: X|
