@@ -41,7 +41,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'ahro.urls'
+ROOT_URLCONF = 'ssoc.urls'
 
 TEMPLATES = [
     {
@@ -59,7 +59,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ahro.wsgi.application'
+WSGI_APPLICATION = 'ssoc.wsgi.application'
 
 
 # Database
