@@ -1,3 +1,4 @@
+from datetime import timedelta
 import os
 import environ
 from pathlib import Path
@@ -29,6 +30,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # 3rd-party apps
+    'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'dj_rest_auth.registration',
+
+    # custom apps
+    'main',
+    'accounts',
+    'rounge',
+    'schedule',
 ]
 
 MIDDLEWARE = [
@@ -95,9 +111,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -113,3 +129,37 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ===== REST FRAMEWORK / JWT =====
+
+# dj-rest-auth
+REST_USE_JWT = True  # JWT 사용 여부
+JWT_AUTH_COOKIE = 'my-app-auth'  # 호출할 Cookie Key 값
+JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'  # Refresh Token Cookie Key 값
+
+# django-allauth
+SITE_ID = 1  # 해당 도메인 id
+ACCOUNT_AUTHENTICATION_METHOD = "username"
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_EMAIL_REQUIRED = True  # User email 필수 여부
+# ACCOUNT_UNIQUE_EMAIL = True  # User email unique 사용 여부
+# ACCOUNT_EMAIL_VERIFICATION = 'none'  # email 인증 필수 여부
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # 사용자 이름 필드 지정
+# ACCOUNT_USERNAME_REQUIRED = False  # User username 필수 여부
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'  # 로그인 인증 수단
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # AccessToken 유효 기간 설정
+    # RefreshToken 유효 기간 설정
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+
+# ===== custom user model =====
+AUTH_USER_MODEL = 'accounts.CustomUser'
