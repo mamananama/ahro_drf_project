@@ -1,4 +1,4 @@
-# 요구사항
+`# 요구사항
 * DRF로 웹 서비스를 제공한다.
 * 계정 기능
   * 회원가입
@@ -11,6 +11,10 @@
   * GPT와 나눈 대화는 데이터베이스에 저장되어야 함
   * 저장된 채팅 내역을 조회가능 해야 함
   * 저장된 채팅 내역은 로그인 한 본인만 볼 수 있음
+* TDD 방법론 도입
+  * test 기반의 개발 방법론
+* JWT를 사용한 사용자 인증 관리
+  * 토큰을 통해 인증이 관리되어야 함
 
 # 사용기술
 
@@ -26,8 +30,11 @@
 * DB
   * sqlite
 * CLOUD SERVER
-  * Amazone Lightsail
+  * AWS Lightsail
     * Ubuntu
+
+# 페이지 디자인
+Link: https://www.figma.com/file/tCeQczwVeGsv9PKTyDdufc/Untitled?type=design&node-id=0%3A1&mode=design&t=soJvn1KAzm7DTD5Z-1
 
 # WBS
 Link: https://1drv.ms/x/s!AiyH75cHF2uNheJxLhLGTF2vIjmFlg?e=B5sFTF&nav=MTVfe0VFNDFCOEI2LURBRkEtNDAwMS05MUJFLTY0MjJEMjNBQUZBM30
@@ -38,7 +45,13 @@ Link: https://1drv.ms/x/s!AiyH75cHF2uNheJxLhLGTF2vIjmFlg?e=B5sFTF&nav=MTVfe0VFND
 |1. main|
 |/main/index/|메인페이지|X|GET: O|X|X|
 |2. account|
-|/account/signup/|POST: O|GET: O|X|X|X|
-|/account/login/|POST: O|GET: O|X|X|X|
-|/account/profile/\<str:username\>/|X|비로그인 User - GET: X<br>로그인 User - GET: O|로그인 한 본인 User - PUT: O<br>로그인 한 본인 제외 모든 User - PUT: X|X|X|
-|/account/delete/\<str:username\>/|X|X|X|로그인 한 본인 User - DELETE: O<br>로그인 한 본인 제외 모든 User - DELETE: X|
+|/account/signup/|회원가입 페이지|POST: O|GET: O|X|X|X|
+|/account/login/|로그인 페이지|POST: O|GET: O|X|X|X|
+|/account/profile/\<str:username\>/|개인 프로필 페이지|X|로그인 User - GET: O<br>비로그인 User - GET: X|로그인 한 본인 User - PUT: O<br>로그인 한 본인 제외 모든 User - PUT: X|X|X|
+|/account/delete/\<str:username\>/|회원 탈퇴 페이지|X|X|X|<로그인 한 본인 User - DELETE: O<br>로그인 한 본인 제외 모든 User - DELETE: X
+|3. schedule|
+|/schedule/|나의 스케쥴 목록과 스케쥴을 등록할 수 있는 페이지|로그인 User - POST: O<br>비로그인 User - POST: X|로그인 User - GET: O<br>비로그인 User - GET: X|X|X|
+|/schedule/chat/|ChatGPT API를 통하여 GPT와 User의 채팅이 이루어지고,<br>일정의 등록, 열람, 수정, 삭제가 발생하는 페이지|로그인 User - POST: O<br>비로그인 User - POST: X|로그인 User - GET: O<br>비로그인 User - GET: X|로그인 User - PUT: O<br>비로그인 User - PUT: X|로그인 User - DELETE: O<br>비로그인 User - DELETE: X|
+|4. rounge|
+|/rounge/|자유게시판 페이지|로그인 User - POST: O<br>비로그인 User - POST: X|GET: O|X|X|
+|/rounge/\<int:post_pk\>|게시물 상세 페이지|X|GET: O|로그인 한 본인 User - PUT: O<br>로그인 한 본인 제외 모든 User - PUT: X|로그인 한 본인 User - DELETE: O<br>로그인 한 본인 제외 모든 User - DELETE: X|
