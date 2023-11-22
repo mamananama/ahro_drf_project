@@ -1,4 +1,4 @@
-`# 요구사항
+# 요구사항
 * DRF로 웹 서비스를 제공한다.
 * 계정 기능
   * 회원가입
@@ -35,6 +35,16 @@
 
 # 페이지 디자인
 Link: https://www.figma.com/file/tCeQczwVeGsv9PKTyDdufc/Untitled?type=design&node-id=0%3A1&mode=design&t=soJvn1KAzm7DTD5Z-1
+|||
+|:---:|:---:|
+|![idle](https://github.com/mamananama/ahro_drf_project/assets/114140050/3d1b3fe9-7fda-4f7e-9634-1601707af4ea)|![login](https://github.com/mamananama/ahro_drf_project/assets/114140050/d2fc641f-b663-4d8f-ad33-24b9049920b3)|
+|메인 페이지|메인 페이지(로그인 상태)|
+|![signup](https://github.com/mamananama/ahro_drf_project/assets/114140050/ed1a26e9-8900-497f-b166-efb6b5985184)|![login](https://github.com/mamananama/ahro_drf_project/assets/114140050/99a9305c-0689-4aa7-9e1b-5a45279c336e)|
+|회원가입 페이지|로그인 페이지|
+
+
+
+
 
 # WBS
 Link: https://1drv.ms/x/s!AiyH75cHF2uNheJxLhLGTF2vIjmFlg?e=B5sFTF&nav=MTVfe0VFNDFCOEI2LURBRkEtNDAwMS05MUJFLTY0MjJEMjNBQUZBM30
