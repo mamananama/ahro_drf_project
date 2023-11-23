@@ -32,12 +32,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 3rd-party apps
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
     'dj_rest_auth.registration',
 
     # custom apps
@@ -48,6 +50,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -142,6 +146,7 @@ SITE_ID = 1  # 해당 도메인 id
 ACCOUNT_AUTHENTICATION_METHOD = "username"
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = True  # User email 필수 여부
+
 # ACCOUNT_UNIQUE_EMAIL = True  # User email unique 사용 여부
 # ACCOUNT_EMAIL_VERIFICATION = 'none'  # email 인증 필수 여부
 # ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # 사용자 이름 필드 지정
@@ -155,6 +160,9 @@ SIMPLE_JWT = {
 }
 
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
@@ -163,3 +171,9 @@ REST_FRAMEWORK = {
 
 # ===== custom user model =====
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# ===== CORS =====
+# CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:5500', 'http://localhost:5500']
+CORS_ALLOW_CREDENTIALS = True
