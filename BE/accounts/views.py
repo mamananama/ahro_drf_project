@@ -1,16 +1,16 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from .models import CustomUser
-from .serializers import CustomUserSerializer
+from .serializers import ProfileSerializer
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAuthorOrReadOnly
 from rest_framework.response import Response
 
 
 class ProfileViewSet(ModelViewSet):
-    lookup_field = 'username'
+    lookup_field = 'username'  # username으로 proifle 조회
     queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
+    serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated,
                           IsAuthorOrReadOnly]
 

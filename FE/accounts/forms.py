@@ -9,7 +9,11 @@ class LoginForm(forms.Form):
 
 
 class SignupForm(forms.Form):
-    username = forms.CharField(max_length=24, label='아이디')
-    email = forms.EmailField()
-    password1 = forms.CharField(widget=forms.PasswordInput, label='비밀번호')
-    password2 = forms.CharField(widget=forms.PasswordInput, label='비밀번호 확인')
+    username = forms.CharField(max_length=24, widget=forms.TextInput(
+        attrs={'id': "username"}), label='아이디')
+    email = forms.EmailField(widget=forms.TextInput(
+        attrs={'id': "email"}), label='이메일')
+    password1 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'id': "password1"}), label='비밀번호')
+    password2 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'id': "password2"}), label='비밀번호 확인')

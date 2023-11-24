@@ -18,4 +18,4 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
         '''
         if request.method in permissions.SAFE_METHODS:
             return True
-        obj.username == request.user
+        return obj.username == request.user
