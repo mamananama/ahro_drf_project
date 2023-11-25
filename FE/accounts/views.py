@@ -3,11 +3,10 @@ from django.shortcuts import render
 from django.conf import settings
 from django.views.generic import FormView
 from . import forms
-from django.http import HttpRequest, request
 
 
 class LoginView(FormView):
-    template_name = 'accounts/account_form.html'
+    template_name = 'accounts/login.html'
     form_class = forms.LoginForm
     success_url = '/'
 
@@ -23,22 +22,15 @@ class LoginView(FormView):
         return super().form_valid(form)
 
 
-# def login(request):
-#     context = {
-#         'BACK_END_URL': settings.BACK_END_URL,
-#     }
-#     return render(request, 'accounts/login.html', context=context)
-
-
 class SignUpView(FormView):
-    template_name = 'accounts/account_form.html'
+    template_name = 'accounts/signup.html'
     form_class = forms.SignupForm
     success_url = '/'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['context_url'] = 'http://' + \
-            settings.BACK_END_URL + '/account/join/'
+            settings.BACK_END_URL + '/account/signup/'
         return context
 
     def form_valid(self, form):

@@ -1,28 +1,28 @@
 from django.contrib.auth.base_user import BaseUserManager
-from django.utils.translation import gettext_lazy as _
 
 
 class CustomUserManager(BaseUserManager):
-
-    def create_user(self, username, email, password, **extra_fields):
+    def create_user(self, username, email, password=None):
         if not username:
-            raise ValueError(_('The Username must be set'))
+            raise ValueError('아이디가 입력되지 않았습니다.')
         if not email:
-            raise ValueError(_('The Email must be set'))
-        email = self.normalize_email(email)
-        user = self.model(username=username, email=email,
-                          password=password, **extra_fields)
+            raise ValueError('이메일이 입력되지 않았습니다.')
+
+        user = self.model(
+            username=username,
+            email=self.normalize_email(email),
+        )
+
         user.set_password(password)
-        user.save()
+        user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
-
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError(_('Superuser must have is_staff=True.'))
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError(_('Superuser must have is_superuser=True.'))
-        return self.create_user(username, email, password, **extra_fields)
+    def create_superuser(self, username, email, password):
+        user = self.model(
+            username=username,
+            email=self.normalize_email(email),
+        )
+        user.is_admin = True
+        user.set_password(password)
+        user.save(using=self._db)
+        return user

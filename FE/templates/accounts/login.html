@@ -1,7 +1,7 @@
 <body>
 	<div>
 		<form method="POST">
-			{{form}}
+			{% csrf_token %} {{form}}
 			<input type="submit" />
 		</form>
 		<div id="message_div">
@@ -16,18 +16,17 @@
 	const $username = document.getElementById("username");
 	const $email = document.getElementById("email");
 	const $password = document.getElementById("password");
-	const $password1 = document.getElementById("password1");
-	const $password2 = document.getElementById("password2");
+	const $verify_password = document.getElementById("verify_password");
 
 	$form.addEventListener("submit", async (e) => {
 		e.preventDefault();
 		let body_data;
-		if ($password2) {
+		if ($verify_password) {
 			body_data = {
 				username: $username.value,
 				email: $email.value,
-				password1: $password1.value,
-				password2: $password2.value,
+				password1: $password.value,
+				password2: $verify_password.value,
 			};
 		} else {
 			body_data = {
@@ -43,20 +42,22 @@
 			},
 			body: JSON.stringify(body_data),
 		});
-		const data = await response.json();
-		if (response.ok) {
+		if (response.ok == true) {
+			const data = await response.json();
 			for (const key in data) {
 				localStorage.setItem(key, data[key]);
 			}
+			console.log(location.host);
 			window.location.href = "http://" + location.host;
 		} else {
 			const $message_div = document.getElementById("message_div");
 			$message_div.removeChild(document.getElementById("inner_wrap"));
 			const $inner_wrap = document.createElement("div");
 			$inner_wrap.setAttribute("id", "inner_wrap");
+			const data = await response.json();
 			for (const key in data) {
 				const $message = document.createElement("p");
-				$message.innerText = data[key];
+				$message.innerText = key + ": " + data[key];
 				console.log($inner_wrap);
 				console.log($message);
 				$inner_wrap.appendChild($message);

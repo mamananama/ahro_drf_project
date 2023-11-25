@@ -112,3 +112,104 @@ if (response.ok) {
         }
     });
 ```
+
+## drf custum user model
+[[D.R.F] 커스텀 유저 구현하기 - 회원가입, 로그인 (tistory.com)](https://wisdom-990629.tistory.com/entry/DRF-%EC%BB%A4%EC%8A%A4%ED%85%80-%EC%9C%A0%EC%A0%80-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85-%EB%A1%9C%EA%B7%B8%EC%9D%B8)
+[[DRF] dj_rest_auth로 커스텀 회원가입 구현하기 (velog.io)](https://velog.io/@ready2start/DRF-djrestauth%EB%A1%9C-%EC%BB%A4%EC%8A%A4%ED%85%80-%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0)
+## Custom user model 비밀번호 확인
+### models.py
+```python
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
+from .managers import CustomUserManager
+  
+
+class CustomUser(AbstractUser):
+    username = models.CharField(max_length=24, unique=True)
+    email = models.EmailField(_('email address'), unique=True)
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email'] # email을 필수로 받음
+    objects = CustomUserManager()
+    date_of_birth = models.DateField(blank=True, null=True)
+    
+    def __str__(self):
+        return self.username
+```
+### serializers.py
+```python
+from .models import CustomUser
+from django.contrib.auth import get_user_model
+from rest_framework import serializers
+
+class CreateUserSerializer(serializers.ModelSerializer):
+    verify_password = serializers.CharField(label='비밀번호 확인')
+    # serializer에 verify_password를 생성하고, field에 등록한다.
+
+    class Meta:
+        model = get_user_model()
+        fields = ['username', 'email', 'password', 'verify_password']
+  
+
+    def create(self, validated_data):
+        user = get_user_model().objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password'],
+        )
+        return user
+```
+먼저 `'verfy_password'`변수를 생성하고, `fields`에 등록한다.
+그렇게 하지 않으면, 원래 모델의 없는 `'verfy_password'`를 추가해서 에러가 발생하고,
+signup 페이지에서 해당 비밀번호 확인 폼이 나타나지 않는다.
+
+
+## 최초 실행시 흐름
+1. `serializer`: `class Meta`
+2. `views`: `class view` 
+3. \<action 발생\>
+4. 해당 `view`의 `serializer` 메소드 실행
+5. 해당 `serializer`의 연결된 `model`의 `manage` 실행
+
+## SignUp error message custum하기
+### 무식한 방법으로...
+`RegisterSerializer`를 상속하여 `CustumSignUp Serializer`를 생성했다.
+
+```python
+class CustomRegisterSerializer(RegisterSerializer):
+	pass
+```
+validate 메시지를 바꾸고 싶었고, 
+```python
+class CustomRegisterSerializer(RegisterSerializer):
+
+    def validate_username(self, username):
+        if get_user_model().objects.filter(username__iexact=username).exists():
+            raise serializers.ValidationError("이미 사용중인 아이디입니다.")
+        return username
+
+    def validate_email(self, email):
+        email = get_adapter().clean_email(email)
+        if email and email_address_exists(email):
+            raise serializers.ValidationError("이미 사용중인 이메일입니다.")
+        return email
+
+    def validate(self, data):
+        if data['password1'] != data['password2']:
+            raise serializers.ValidationError("비밀번호가 일치하지 않습니다.")
+        return data
+```
+상속받은 `RegisterSerializer`에서 해당 메시지를 띄우는 validate를 찾아, ValidationError를 띄우는 메시지를 수정했다.
+user validation은 존재하지 않아, 직접 추가하였다.
+
+
+## Custom user creation에서 "ConnectionRefusedError: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다" 문제
+
+* Email 인증 모듈에서 발생한 문제
+* Email을 인증 받는 settings.py 기본 설정이 켜져 있었다.
+	* 	settings.py에 `ACCOUNT_EMAIL_VERIFICATION='none'` 을 추가한다.
+		*  `ACCOUNT_EMAIL_VERIFICATION='none'`: 이메일 인증을 받아야지 계정 사용가능
+		* `ACCOUNT_EMAIL_VERIFICATION='medatory'`: 이메일 인증을 받지 않으면 계정을 사용할 수없음
+		* `ACCOUNT_EMAIL_VERIFICATION='optional'`: 가입 완료 인증 이메일은 발송되지만, 계정 사용가능
+	* 나의 프로젝트의 경우에선, 인증 이메일을 보내는 기능이 없기 때문에 문제를 계속해서 보냈다.
