@@ -1,39 +1,46 @@
-<body>
-	<div>
-		<form method="POST">
-			{% csrf_token %} {{form}}
-			<input type="submit" />
-		</form>
-		<div id="message_div">
-			<div id="inner_wrap"></div>
+{% extends "content_base.html" %} {% block page_title %}LOGIN{% endblock page_title %} {% block content %}
+<div class="">
+	<form method="POST" class="flex flex-col gap-16">
+		<div class="inner-wrap flex flex-col justify-center items-center gap-4">
+			{% csrf_token %} {% for field in form %}
+			<div class="flex flex-row w-4/5 h-14 items-center">
+				<label class="w-36 shrink-0 text-xl">{{field.label}}</label>
+				<div class="w-64 flex-1"><div class="field-detail flex flex-row justify-center">{{field}}</div></div>
+			</div>
+			{% endfor %}
+
+			<div id="message_div">
+				<div id="message_wrap"></div>
+			</div>
 		</div>
-	</div>
-</body>
+		<div class="flex flex-row justify-around">
+			<input
+				type="button"
+				class="text-2xl transition ease-in-out bg-red-400 w-52 h-16 rounded-lg drop-shadow-lg shadow-black hover:bg-red-500 duration-200"
+				value="취소"
+				onclick="location.href='{% url 'main:index' %}'" />
+
+			<input
+				type="submit"
+				class="text-2xl transition ease-in-out bg-blue-300 w-52 h-16 rounded-lg drop-shadow-lg shadow-black hover:bg-blue-500 duration-200"
+				value="확인" />
+		</div>
+	</form>
+</div>
+{% endblock content %} {% block script_content %}
 <script>
-	const url = "{{context_url}}";
+	const url = "http://{{ BACK_END_URL }}/account/login/";
 
 	const $form = document.querySelector("form");
 	const $username = document.getElementById("username");
-	const $email = document.getElementById("email");
 	const $password = document.getElementById("password");
-	const $verify_password = document.getElementById("verify_password");
 
 	$form.addEventListener("submit", async (e) => {
 		e.preventDefault();
-		let body_data;
-		if ($verify_password) {
-			body_data = {
-				username: $username.value,
-				email: $email.value,
-				password1: $password.value,
-				password2: $verify_password.value,
-			};
-		} else {
-			body_data = {
-				username: $username.value,
-				password: $password.value,
-			};
-		}
+		const body_data = {
+			username: $username.value,
+			password: $password.value,
+		};
 
 		const response = await fetch(url, {
 			method: "POST",
@@ -47,22 +54,24 @@
 			for (const key in data) {
 				localStorage.setItem(key, data[key]);
 			}
-			console.log(location.host);
+			getUserInfo();
 			window.location.href = "http://" + location.host;
 		} else {
 			const $message_div = document.getElementById("message_div");
-			$message_div.removeChild(document.getElementById("inner_wrap"));
-			const $inner_wrap = document.createElement("div");
-			$inner_wrap.setAttribute("id", "inner_wrap");
+			$message_div.removeChild(document.getElementById("message_wrap"));
+			const $message_wrap = document.createElement("div");
+			$message_wrap.setAttribute("id", "message_wrap");
 			const data = await response.json();
 			for (const key in data) {
 				const $message = document.createElement("p");
 				$message.innerText = key + ": " + data[key];
-				console.log($inner_wrap);
+				console.log($message_wrap);
 				console.log($message);
-				$inner_wrap.appendChild($message);
+				$message_wrap.appendChild($message);
 			}
-			$message_div.appendChild($inner_wrap);
+			$message_div.appendChild($message_wrap);
 		}
 	});
 </script>
+
+{% endblock script_content %}

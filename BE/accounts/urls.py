@@ -8,7 +8,7 @@ router.register('profile', views.ProfileViewSet)
 
 urlpatterns = [
     path("", include("dj_rest_auth.urls")),
-    path('join/', include("dj_rest_auth.registration.urls")),
     path('signup/', views.UserCreate.as_view(), name='signup'),
+    path('userinfo/', views.get_user_info, name='userinfo'),
     path('', include(router.urls)),
 ]

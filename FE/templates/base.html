@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SSOC</title>
+		<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+		{% load static %}
+		<link rel="stylesheet" href='{% static "css/base.css" %}' />
+	</head>
+
+	<body>
+		<header class="main-header">
+			<nav class="h-12 flex row justify-center items-center">
+				<div class="w-8/12 font-bold text-2xl text-white pl-5 flex flex-row justify-between items-center">
+					<h1>SSOC</h1>
+					<div id="nav-menu" class="w-96 flex flex-row gap-5 justify-end"></div>
+				</div>
+			</nav>
+		</header>
+		<div class="main-container flex flex-col items-center">{% block page_content %}{% endblock page_content %}</div>
+	</body>
+	<script>
+		const back_end_url = "{{ BACK_END_URL }}";
+		const header = {};
+		const $nav_menu = document.getElementById("nav-menu");
+		if (localStorage.getItem("access_token")) {
+			const $profile = document.createElement("button");
+			$profile.innerText = '"' + localStorage.getItem("username") + '"님, 안녕하세요';
+			$profile.setAttribute("onclick", "location.href='{% url 'main:index' %}'");
+			$profile.setAttribute("id", "profile");
+			$profile.setAttribute("class", "flex");
+			$nav_menu.appendChild($profile);
+
+			const $logout = document.createElement("button");
+			$logout.innerText = "LOG OUT";
+			$logout.setAttribute("onclick", "location.href='{% url 'main:index' %}'");
+			$logout.setAttribute("id", "logout");
+			$logout.setAttribute("class", "flex");
+			$nav_menu.appendChild($logout);
+		} else {
+			const $login = document.createElement("button");
+			$login.innerText = "LOGIN";
+			$login.setAttribute("id", "login");
+			$login.setAttribute("class", "flex");
+			$login.setAttribute("onclick", "location.href='{% url 'accounts:login' %}'");
+			const $signup = document.createElement("button");
+			$signup.setAttribute("id", "signup");
+			$signup.setAttribute("class", "flex");
+			$signup.innerText = "SIGN UP";
+			$signup.setAttribute("onclick", "location.href='{% url 'accounts:signup' %}'");
+			$nav_menu.appendChild($login);
+			$nav_menu.appendChild($signup);
+		}
+		if (document.getElementById("logout")) {
+			const $logout_btn = document.getElementById("logout");
+			$logout_btn.addEventListener("click", async (e) => {
+				localStorage.clear();
+			});
+		}
+
+		async function refreshToken() {
+			const response = await fetch("http://" + back_end_url + "/account/token/refresh/", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer ${localStorage.getItem('access_token')}",
+				},
+				body: JSON.stringify({ refresh: "${localStorage.getItem('refresh_token')}" }),
+			});
+
+			const data = await response.json();
+			if (!response.ok) {
+				throw new Error("Token refresh failed");
+			}
+
+			localStorage.setItem("access_token", data.access);
+			return data.access;
+		}
+
+		function getToken() {
+			const accessToken = localStorage.getItem("access_token");
+			if (!accessToken) {
+				throw new Error("Access token not found");
+			}
+
+			const payload = JSON.parse(atob(accessToken.split(".")[1]));
+			const exp = payload.exp;
+			const now = Date.now() / 1000;
+
+			// 토큰이 만료되면 새로운 토큰을 요청
+			if (now > exp) {
+				return refreshToken();
+			}
+
+			return Promise.resolve(accessToken);
+		}
+
+		async function getUserInfo() {
+			getToken();
+			await fetch("http://" + back_end_url + "/account/userinfo/", {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + localStorage.getItem("access_token"),
+				},
+			})
+				.then((res) => {
+					return res.json();
+				})
+				.then((data) => {
+					for (const key in data) {
+						localStorage.setItem(key, data[key]);
+					}
+				});
+		}
+	</script>
+	{% block script_content %}{% endblock script_content %}
+</html>

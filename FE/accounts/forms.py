@@ -14,6 +14,6 @@ class SignupForm(forms.Form):
     email = forms.EmailField(widget=forms.TextInput(
         attrs={'id': "email"}), label='이메일')
     password1 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'id': "password"}), label='비밀번호')
+        attrs={'id': "password1"}), label='비밀번호')
     password2 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'id': "verify_password"}), label='비밀번호 확인')
+        attrs={'id': "password2"}), label='비밀번호 확인')

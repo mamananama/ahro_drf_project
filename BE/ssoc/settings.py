@@ -152,6 +152,7 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # AccessToken 유효 기간 설정
     # RefreshToken 유효 기간 설정
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    "ALGORITHM": "HS512",
 }
 
 REST_FRAMEWORK = {

@@ -12,9 +12,6 @@ class LoginView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['context_url'] = 'http://' + \
-            settings.BACK_END_URL + '/account/login/'
-
         return context
 
     def form_valid(self, form):
@@ -29,12 +26,14 @@ class SignUpView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['context_url'] = 'http://' + \
-            settings.BACK_END_URL + '/account/signup/'
         return context
 
     def form_valid(self, form):
         return super().form_valid(form)
+
+
+def get_user_data(request):
+    pass
 
 
 login = LoginView.as_view()
