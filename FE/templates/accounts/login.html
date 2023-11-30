@@ -1,4 +1,6 @@
-{% extends "content_base.html" %} {% block page_title %}LOGIN{% endblock page_title %} {% block content %}
+{% extends "content_base.html" %} {% block page_title %}
+<h1 class="text-7xl items-start-start" onclick='location.href="{% url "rounge:postlist" %}"' style="cursor: pointer">LOGIN</h1>
+{% endblock page_title %} {% block content %}
 <div class="">
 	<form method="POST" class="flex flex-col gap-16">
 		<div class="inner-wrap flex flex-col justify-center items-center gap-4 inset-shadow">
