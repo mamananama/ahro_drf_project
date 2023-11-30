@@ -213,3 +213,24 @@ user validation은 존재하지 않아, 직접 추가하였다.
 		* `ACCOUNT_EMAIL_VERIFICATION='medatory'`: 이메일 인증을 받지 않으면 계정을 사용할 수없음
 		* `ACCOUNT_EMAIL_VERIFICATION='optional'`: 가입 완료 인증 이메일은 발송되지만, 계정 사용가능
 	* 나의 프로젝트의 경우에선, 인증 이메일을 보내는 기능이 없기 때문에 문제를 계속해서 보냈다.
+## Viewset에서 Foreignkey 접근
+### model.py
+```python
+class Post(models.Model):
+    author = models.ForeignKey(
+        "accounts.CustomUser", verbose_name="author", on_delete=models.CASCADE, related_name='author')
+```
+`ForeingKey`의 `related_name`을 통해 연결,
+
+### serializers.py
+```python
+class CustomPostCreateSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField()
+
+    class Meta:
+        model = Post
+        fields = ['author', 'title', 'created_at',
+                  'updated_at', 'schedule', 'content']
+```
+해당 `related_name`을 `StringRelatedField`로 `serializers`에 받도록 한다.
+`StringRelatedField`는 해당 `ForeingKey`의 `__str__` 메소드를 받는다.

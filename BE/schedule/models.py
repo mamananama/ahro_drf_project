@@ -6,7 +6,7 @@ class Schedule(models.Model):
     owner = models.ForeignKey(
         "accounts.CustomUser", verbose_name=("owner"), on_delete=models.CASCADE)
     title = models.CharField(max_length=64, blank=False, null=False)
-    start_at = models.DateTimeField()
+    start_at = models.DateTimeField(blank=False, null=False)
     end_at = models.DateTimeField()
     content = models.TextField()
 

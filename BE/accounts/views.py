@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .serializers import ProfileSerializer, CustomRegisterSerializer
-from .permissions import IsAuthorOrReadOnly
+from .permissions import IsAuthorOrReadOnly, OnlyAuthor
 
 
 class ProfileViewSet(ModelViewSet):
@@ -32,8 +32,8 @@ class UserCreate(RegisterView):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, OnlyAuthor])
 def get_user_info(request):
     print(request.data)
-    content = {'message': 'Hello, World!', 'username': str(request.user)}
+    content = {'username': str(request.user)}
     return Response(content)

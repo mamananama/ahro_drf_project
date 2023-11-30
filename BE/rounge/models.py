@@ -6,12 +6,12 @@ from django.urls import reverse
 
 class Post(models.Model):
     author = models.ForeignKey(
-        "accounts.CustomUser", verbose_name="author", on_delete=models.CASCADE)
+        "accounts.CustomUser", verbose_name="author", on_delete=models.CASCADE, related_name='author')
     title = models.CharField(max_length=128, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     schedule = models.ForeignKey("schedule.Schedule", verbose_name=(
-        "schedule"), on_delete=models.CASCADE)
+        "schedule"), on_delete=models.CASCADE, null=True, blank=True)
     content = models.TextField(null=False, blank=False)
 
     class Meta:

@@ -13,8 +13,8 @@
 		<header class="main-header">
 			<nav class="h-12 flex row justify-center items-center">
 				<div class="w-8/12 font-bold text-2xl text-white pl-5 flex flex-row justify-between items-center">
-					<h1>SSOC</h1>
-					<div id="nav-menu" class="w-96 flex flex-row gap-5 justify-end"></div>
+					<h1 onclick='location.href="{% url "main:index" %}"' style="cursor: pointer">SSOC</h1>
+					<div id="nav-menu" class="w-96 text-base flex flex-row gap-5 justify-end"></div>
 				</div>
 			</nav>
 		</header>
@@ -25,19 +25,7 @@
 		const header = {};
 		const $nav_menu = document.getElementById("nav-menu");
 		if (localStorage.getItem("access_token")) {
-			const $profile = document.createElement("button");
-			$profile.innerText = '"' + localStorage.getItem("username") + '"님, 안녕하세요';
-			$profile.setAttribute("onclick", "location.href='{% url 'main:index' %}'");
-			$profile.setAttribute("id", "profile");
-			$profile.setAttribute("class", "flex");
-			$nav_menu.appendChild($profile);
-
-			const $logout = document.createElement("button");
-			$logout.innerText = "LOG OUT";
-			$logout.setAttribute("onclick", "location.href='{% url 'main:index' %}'");
-			$logout.setAttribute("id", "logout");
-			$logout.setAttribute("class", "flex");
-			$nav_menu.appendChild($logout);
+			setUserMenu();
 		} else {
 			const $login = document.createElement("button");
 			$login.innerText = "LOGIN";
@@ -52,12 +40,6 @@
 			$nav_menu.appendChild($login);
 			$nav_menu.appendChild($signup);
 		}
-		if (document.getElementById("logout")) {
-			const $logout_btn = document.getElementById("logout");
-			$logout_btn.addEventListener("click", async (e) => {
-				localStorage.clear();
-			});
-		}
 
 		async function refreshToken() {
 			const response = await fetch("http://" + back_end_url + "/account/token/refresh/", {
@@ -66,14 +48,13 @@
 					"Content-Type": "application/json",
 					Authorization: "Bearer ${localStorage.getItem('access_token')}",
 				},
-				body: JSON.stringify({ refresh: "${localStorage.getItem('refresh_token')}" }),
+				body: JSON.stringify({ refresh: localStorage.getItem("refresh_token") }),
 			});
 
 			const data = await response.json();
 			if (!response.ok) {
 				throw new Error("Token refresh failed");
 			}
-
 			localStorage.setItem("access_token", data.access);
 			return data.access;
 		}
@@ -96,9 +77,9 @@
 			return Promise.resolve(accessToken);
 		}
 
-		async function getUserInfo() {
+		function setUserMenu() {
 			getToken();
-			await fetch("http://" + back_end_url + "/account/userinfo/", {
+			fetch("http://" + back_end_url + "/account/userinfo/", {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
@@ -109,9 +90,24 @@
 					return res.json();
 				})
 				.then((data) => {
-					for (const key in data) {
-						localStorage.setItem(key, data[key]);
-					}
+					const $profile = document.createElement("button");
+					$profile.innerText = '"' + data["username"] + '"님, 안녕하세요';
+					$profile.setAttribute("onclick", "location.href=''");
+					$profile.setAttribute("id", "profile");
+					$profile.setAttribute("class", "flex");
+					$nav_menu.appendChild($profile);
+
+					const $logout = document.createElement("button");
+					$logout.innerText = "LOG OUT";
+					$logout.setAttribute("onclick", "location.href='{% url 'main:index' %}'");
+					$logout.setAttribute("id", "logout");
+					$logout.setAttribute("class", "flex");
+					$nav_menu.appendChild($logout);
+
+					const $logout_btn = document.getElementById("logout");
+					$logout_btn.addEventListener("click", async (e) => {
+						localStorage.clear();
+					});
 				});
 		}
 	</script>

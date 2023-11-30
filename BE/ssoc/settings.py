@@ -151,7 +151,7 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'  # email 인증 필수 여부
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # AccessToken 유효 기간 설정
     # RefreshToken 유효 기간 설정
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(minutes=120),
     "ALGORITHM": "HS512",
 }
 

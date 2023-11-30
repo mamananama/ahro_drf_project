@@ -17,12 +17,37 @@ html *{
     font-family: 'Pretendard-Regular';
 }
 
-h1, h2, h3, h4{
+h1 , h2 , h3 , h4 {
     font-family: 'SBAggroB';
 }
 
 body{
     background-color: #e8e8e8;
+}
+
+.new-morph{
+        box-shadow:  8px 8px 20px #c5c5c5cc,
+             -8px -8px 20px #ffffffcc;
+}
+
+.inset-shadow{
+    box-shadow: inset 0px 4px 8px #777777cc;
+}
+
+.main-title-wrap{
+    box-sizing: border-box;
+    width: 1400px;
+    height: 200px;
+    display: flex;
+    flex-direction: row;
+}
+
+.main-content-wrap{
+    box-sizing: border-box;
+    width: 1400px;
+    height: 600px;
+    display: flex;
+    flex-direction: row;
 }
 
 .main-container {
@@ -41,8 +66,6 @@ body{
     width: 1300px;
     height: 800px;
     border-radius: 22px;
-    box-shadow:  16px 16px 20px #c5c5c5cc,
-             -16px -16px 20px #ffffffcc;
     padding: 28px;
 }
 
@@ -51,8 +74,7 @@ body{
     height: 500px;
     border-radius: 22px;
     padding: 20px;
-    background-color: white;
-    box-shadow:  inset 0px 4px 8px #777777cc;
+    background-color: white;    
 }
 
 .field-detail input{
@@ -62,17 +84,23 @@ body{
     height: 80%;
 }
 
-.field-detail input:focus{
-    border: 1px solid rgb(15, 119, 204);
-    box-shadow: 0px 0px 8px rgb(101, 163, 214);
-}
-
-.field-detail input{
+textarea, input{
+    border: 1px solid #777777;
     transition: all;
     transition-timing-function: ease-in-out;
     transition-duration: 100ms;
 }
 
-.profile span{
-    
+textarea:focus, input:focus{
+    border: 1px solid rgb(15, 119, 204);
+    box-shadow: 0px 0px 8px rgb(101, 163, 214);
+}
+
+
+#shared-schedule{
+    background-color: #ACD8B5;
+}
+
+#rounge{
+    background-color: #BAC6DC;
 }

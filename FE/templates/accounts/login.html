@@ -1,11 +1,11 @@
 {% extends "content_base.html" %} {% block page_title %}LOGIN{% endblock page_title %} {% block content %}
 <div class="">
 	<form method="POST" class="flex flex-col gap-16">
-		<div class="inner-wrap flex flex-col justify-center items-center gap-4">
+		<div class="inner-wrap flex flex-col justify-center items-center gap-4 inset-shadow">
 			{% csrf_token %} {% for field in form %}
 			<div class="flex flex-row w-4/5 h-14 items-center">
 				<label class="w-36 shrink-0 text-xl">{{field.label}}</label>
-				<div class="w-64 flex-1"><div class="field-detail flex flex-row justify-center">{{field}}</div></div>
+				<div class="w-64 flex-1 field-detail flex flex-row justify-center">{{field}}</div>
 			</div>
 			{% endfor %}
 
@@ -54,7 +54,6 @@
 			for (const key in data) {
 				localStorage.setItem(key, data[key]);
 			}
-			getUserInfo();
 			window.location.href = "http://" + location.host;
 		} else {
 			const $message_div = document.getElementById("message_div");
@@ -65,8 +64,6 @@
 			for (const key in data) {
 				const $message = document.createElement("p");
 				$message.innerText = key + ": " + data[key];
-				console.log($message_wrap);
-				console.log($message);
 				$message_wrap.appendChild($message);
 			}
 			$message_div.appendChild($message_wrap);

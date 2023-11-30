@@ -1,0 +1,57 @@
+{% extends "content_base.html" %} {% block page_title %}
+<h1 class="text-7xl items-start-start" onclick='location.href="{% url "rounge:postlist" %}"' style="cursor: pointer">ROUNGE</h1>
+{% endblock page_title %} {% block content %}
+<div class="w-full h-full rounded-2xl bg-white inset-shadow">
+	<div class="box-border w-full h-full flex flex-col p-5 pt-14">
+		<div class="flex-shrink-0 flex flex-row">
+			<div class="flex flex-col w-4/6 flex-shrink-0">
+				<div class="flex flex-row">
+					<p class="w-16">제목:</p>
+					<p>{{data.title}}</p>
+				</div>
+				<div class="flex flex-row">
+					<p class="w-16">작성자:</p>
+					<p>{{data.author}}</p>
+				</div>
+				<div class="flex flex-row">
+					<p class="w-16">작성시간:</p>
+					<p name="datetime">{{data.created_at}}</p>
+				</div>
+			</div>
+			<div class="flex flex-row flex-grow justify-end gap-4">
+				<button onclick="location.href='{% url 'rounge:postupdate' pk %}'" class="w-16 h-7 rounded-lg bg-blue-400 text-white">수정</button>
+				<button id="postdelete" class="w-16 h-7 rounded-lg bg-red-400 text-white">삭제</button>
+			</div>
+		</div>
+		<div class="w-full h-1 bg-stone-400 mt-6 mb-6"></div>
+		<div class="flex-grow overflow-y-auto">{{data.content}}</div>
+		<div class="h-20 flex-shrink-0"></div>
+	</div>
+</div>
+
+{% endblock content %} {% block script_content %}
+<script>
+	const $postdelete = document.getElementById("postdelete");
+	const $pk = {{pk}};
+	$postdelete.addEventListener("click", async (e) => {
+		e.preventDefault();
+		refreshToken()
+		await fetch("http://" + back_end_url + "/rounge/api/"+$pk+"/", {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer "+ localStorage.getItem('access_token'),
+			},
+		}
+		);
+		window.location.href = "http://" + location.host + '/rounge/';
+	});
+
+	const roungeUrl = "http://{{ BACK_END_URL }}/rounge/api/";
+
+	const $datetimes = document.getElementsByName("datetime");
+	for (datetime in $datetimes) {
+		$datetimes[datetime].innerText = $datetimes[0].innerText.replace("T", " ").substring(0, 19);
+	}
+</script>
+{% endblock script_content %}

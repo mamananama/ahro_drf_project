@@ -32,8 +32,9 @@ class SignUpView(FormView):
         return super().form_valid(form)
 
 
-def get_user_data(request):
-    pass
+def profile(request):
+    print(f'request =========== {request.headers}')
+    return render(request, 'main/index.html')
 
 
 login = LoginView.as_view()
