@@ -143,7 +143,7 @@ from .models import CustomUser
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-class CreateUserSerializer(serializers.ModelSerializer):
+class CustomRegisterSerializer(RegisterSerializer):
     verify_password = serializers.CharField(label='비밀번호 확인')
     # serializer에 verify_password를 생성하고, field에 등록한다.
 
