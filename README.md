@@ -39,6 +39,11 @@ Link: https://www.figma.com/file/tCeQczwVeGsv9PKTyDdufc/Untitled?type=design&nod
 ## WBS
 Link: https://1drv.ms/x/s!AiyH75cHF2uNheJxLhLGTF2vIjmFlg?e=B5sFTF&nav=MTVfe0VFNDFCOEI2LURBRkEtNDAwMS05MUJFLTY0MjJEMjNBQUZBM30
 
+## ERD
+![drf_project](https://github.com/mamananama/ahro_drf_project/assets/114140050/da9ac7b4-5d1a-4ead-985f-045e49490f41)
+
+
+
 ## URL 설계
 |URL|설명|CREATE|READ|UPDATE|DELETE|
 |:---|:---|:---:|:---:|:---:|:---:|
