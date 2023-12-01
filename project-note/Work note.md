@@ -30,8 +30,11 @@ local에서도 Port number가 다르면 서로 다른 출처(Origin)으로 본�
 브라우저는 기본적으로 SOP(Same Origin Policy) 정책 
 
 `settings.py`에서,
+
 `INSTALLED_APPS`에 `'corsheaders'` 추가,
+
 `MIDDLEWARE`에 `'corsheaders.middleware.CorsMiddleware'` 추가,
+
 허용할 url을 `CORS_ALLOWED_ORIGINS=[]`리스트에 url을 입력해서 허용할 출처(Origin)를 등록한다.
 
 ## JavaScript를 통해 API response 받기
