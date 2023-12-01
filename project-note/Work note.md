@@ -172,7 +172,7 @@ signup 페이지에서 해당 비밀번호 확인 폼이 나타나지 않는다.
 4. 해당 `view`의 `serializer` 메소드 실행
 5. 해당 `serializer`의 연결된 `model`의 `manage` 실행
 
-## SignUp error message custum하기
+## SignUp error message custom하기
 ### 무식한 방법으로...
 `RegisterSerializer`를 상속하여 `CustumSignUp Serializer`를 생성했다.
 
