@@ -49,7 +49,10 @@ Link: https://1drv.ms/x/s!AiyH75cHF2uNheJxLhLGTF2vIjmFlg?e=B5sFTF&nav=MTVfe0VFND
 |:---|:---|:---:|:---:|:---:|:---:|
 |1. main|
 |/main/index/|메인페이지|X|GET: O|X|X|
-|2. rounge|
+|2. account|
+|/account/signup/|회원가입 페이지|POST: O|GET: O|X|X|X|
+|/account/login/|로그인 페이지|POST: O|GET: O|X|X|X|
+|3. rounge|
 |/rounge/|자유게시판 페이지|로그인 User - POST: O<br>비로그인 User - POST: X|GET: O|X|X|
 |/rounge/post/\<int:post_pk\>|게시물 상세 페이지|X|GET: O|로그인 한 본인 User - PUT: O<br>로그인 한 본인 제외 모든 User - PUT: X|로그인 한 본인 User - DELETE: O<br>로그인 한 본인 제외 모든 User - DELETE: X|
 
